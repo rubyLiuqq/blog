@@ -88,10 +88,10 @@ window.onerror 算是一种特别暴力的容错手段，try..catch 也是如此
 ## 收集日志存在的问题
 收集日志的目的是为了及时发现问题，最好日志能够告诉我们，错误在哪里，更优秀的做法是，不仅告诉错误在哪里，还告诉我们，如何处理这个错误。终极目标是，发现错误，自动容错，这一步是最难的。
 ### 1.无具体报错信息，Script error.
-具体原因![可看这里](https://stackoverflow.com/questions/5913978/cryptic-script-error-reported-in-javascript-in-chrome-and-firefox)，修改方式为：
-1、`在script标签中加入crossorigin属性`
+具体原因 [可看这里](https://stackoverflow.com/questions/5913978/cryptic-script-error-reported-in-javascript-in-chrome-and-firefox)，修改方式为：
+1、<font color="#d00">在script标签中加入crossorigin属性</font>
 `<script crossorigin="anonymous" src="your.crossorigin.script"></script>`
-2、`响应头增加Access-Control-Allow-Origin`
+2、<font color="#d00">响应头增加Access-Control-Allow-Origin</font>
 `Access-Control-Allow-Origin: *`
 
 ### 2.上报方式
