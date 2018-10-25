@@ -41,3 +41,5 @@ eg：git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96  (ID)
 【已经push】`git revert commintId`
 git revert 反转提交（工作树必须干净  三个区域的状态、git status干净）用一个新提交来消除一个历史提交所做的任何修改。
 revert 本地代码回退，再git push 更新线上代码
+
+## 子模块

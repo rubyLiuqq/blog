@@ -78,4 +78,13 @@ theme: rubyliu
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: https://github.com/rubyliuqq/rubyliuqq.github.io
+  branch: master
+
+archive_generator:
+        per_page: 0
+        yearly: false
+        monthly: false
+        daily: false
+

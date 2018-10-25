@@ -335,4 +335,29 @@ onLoad: 等待页面的所有资源都加载完成才会触发，css、js、图�
 DOMContentLoaded: 当页面的内容解析完成后，则触发该事件
 
 
+### 十四、原生JS中 forEach 和 Map 区别
+
+### 十五、arguments
+arguments 是一个类数组对象。代表传给一个function的参数列表。
+1、其包含一个 `length` 属性，可以用 `arguments.length` 来获得传入函数的参数个数；
+2、arguments 转数组的方法
+  `Array.prototype.slice.call(arguments);`
+  `[].slice.call(arguments);`
+slice 方法得到的结果是一个数组，参数便是 arguments。事实上，满足一定条件的对象都能被 slice 方法转换成数组。
+条件就是： 1)、属性为 0，1，2...；     2）、具有 length 属性；
+
+### 十六、JS中宽高各属性介绍
+网页可见区域宽： document.body.clientWidth;
+网页可见区域高： document.body.clientHeight;
+网页可见区域宽： document.body.offsetWidth   (包括边线的宽);
+网页可见区域高： document.body.offsetHeight (包括边线的宽);
+网页正文全文宽： document.body.scrollWidth;
+网页正文全文高： document.body.scrollHeight;
+网页被卷去的高： document.body.scrollTop;
+网页被卷去的左： document.body.scrollLeft;
+网页正文部分上： window.screenTop;
+网页正文部分左： window.screenLeft;
+屏幕分辨率的高： window.screen.height;
+屏幕分辨率的宽： window.screen.width;
+屏幕可用工作区高度： window.screen.availHeight;
 

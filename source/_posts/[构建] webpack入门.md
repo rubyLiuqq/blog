@@ -2,7 +2,7 @@
 title: webpack 入门
 date: 2018-09-28 11:42:48
 tags: [webpack]
-categories: 
+categories: 构建
 toc: true
 ---
 
@@ -11,6 +11,7 @@ toc: true
 `CommonJS` 的优点在于：
 - 代码可复用于 Node.js 环境下并运行，例如做同构应用；
 - 通过 NPM 发布的很多第三方模块都采用了 CommonJS 规范。
+
 `CommonJS` 的缺点在于这样的代码无法直接运行在浏览器环境下，必须通过工具转换成标准的 ES5。
 
 `AMD` 也是一种 JavaScript 模块化规范，与 CommonJS 最大的不同在于它采用异步的方式去加载依赖的模块。 AMD 规范主要是为了解决针对浏览器环境的模块化问题，最具代表性的实现是 requirejs。
@@ -19,6 +20,7 @@ toc: true
 - 可异步加载依赖；
 - 可并行加载多个依赖；
 - 代码可运行在浏览器环境和 Node.js 环境下。
+
 `AMD` 的缺点在于JavaScript 运行环境没有原生支持 AMD，需要先导入实现了 AMD 的库后才能正常使用。
 
 `TypeScript` 的缺点在于语法相对于 JavaScript 更加啰嗦，并且无法直接运行在浏览器或 Node.js 环境下。
@@ -33,8 +35,6 @@ toc: true
 - 自动刷新：监听本地源代码的变化，自动重新构建、刷新浏览器。
 - 代码校验：在代码被提交到仓库前需要校验代码是否符合规范，以及单元测试是否通过。
 - 自动发布：更新完代码后，自动构建出线上发布代码并传输给发布系统。
-
-http://www.xbhub.com/wiki/webpack/1%E5%85%A5%E9%97%A8/1-2%E5%B8%B8%E8%A7%81%E7%9A%84%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7%E5%8F%8A%E5%AF%B9%E6%AF%94.html
 
 ## webpack配置
 webpack官方提供的配置方法是通过module.exports返回一个json，但是这种场景不灵活，不能适配多种场景。
@@ -100,7 +100,7 @@ webpack可以在终端中使用：
   }
 }
 ```
-1. 多个入口文件：eg: `entry: ['./src/index.js', './vendor/bootstrap.min.js']`
+1. 多个入口文件：eg: `entry: ['./src/index.js', './vendor/bootstrap.min.js']` 一个入口，多个文件
 最终 bootstrap 会被追加到打包好的 index.js 中，数组中的最后一个会被 export。
 
 2. 多个打包目标
@@ -179,20 +179,63 @@ Loader 的配置说明：
 - `query`：为loaders提供额外的设置选项（可选）
 
 **loader 除了做文件转换以外，还可以创建额外的文件**
-语法：
 ```js
-{
-  // 通过扩展名称和正则表达式来匹配资源文件
-  test: String ,          
-  // 匹配到的资源会应用 loader， loader 可以为 string 也可以为数组
-  loader: String | Array
+module: {
+  rules: [
+    // template loaders
+    {
+      test: /\.(tpl|html)$/,
+      use: 'html-loader',
+    },
+    {
+      test: /\.art$/,
+      use: 'art-template-loader',
+    },
+    {
+      test: /\.(hbs|handlebars)$/,
+      use: 'handlebars-loader',
+    },
+    // picture loader
+    {
+      test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+      use: {
+        loader: 'url-loader',
+        query: {
+          limit: 8192,
+          name: 'img/[name].[ext]',
+        },
+      },
+    },
+    // font loader
+    {
+      test: /(\.(woff2?|eot|ttf|otf)|font.*\.svg)(\?.*)?$/,
+      use: {
+        loader: 'url-loader',
+        query: {
+          limit: 8192,
+          name: 'fonts/[name].[ext]',
+        },
+      },
+    },
+    // media file loader
+    {
+      test: /\.(mp4|3gp|avi|mkv|wmv|mpg|vob|flv|swf|mov|rmvb|mp3|wma|wav|aac|ogg|flac|ape|m4a)$/,
+      use: {
+        loader: 'url-loader',
+        query: {
+          limit: 8192,
+          name: 'media/[name].[ext]',
+        },
+      },
+    },
+  ],
 }
 ```
 
 #### 6、Babel
-作用：是一个编译JavaScript的平台：
-- 使用下一代的JavaScript代码（ES6，ES7...），即使这些标准目前并未被当前的浏览器完全的支持；
-- 使用基于JavaScript进行了拓展的语言，比如React的JSX；
+作用：是一个编译 JS 的平台：
+- 使用下一代的 JS 代码（ES6，ES7...），即使这些标准目前并未被当前的浏览器完全的支持；
+- 使用基于 JS 进行了拓展的语言，比如React的JSX；
 安装：`npm install --save-dev  babel-core  babel-loader  babel-preset-es2015  babel-preset-react`
 Babel其实是几个模块化的包，其核心功能位于称为`babel-core`的npm包中，webpack可以把其不同的包整合在一起使用，对于每一个需要的功能或拓展，你都需要安装单独的包（用得最多的是解析ES6的`babel-preset-es2015`包和解析JSX的`babel-preset-react`包）。
 
@@ -237,13 +280,11 @@ Webpack从一开始就对CSS模块化提供了支持，在CSS loader中进行配
 然后就可以直接把CSS的类名传递到组件的代码中
 好处：这样做只对当前组件有效，不必担心在不同的模块中使用相同的类名造成冲突。
 
-#### 9、CSS预处理器—PostCSS / autoprefixer
+#### 9、CSS预处理器 / PostCSS / autoprefixer
 `Sass` 和 `Less` 之类的预处理器是对原生CSS的拓展，它们允许使用类似于variables, nesting, mixins, inheritance等不存在于CSS中的特性来写CSS。
-在webpack里使用loader进行配置：`Less Loader、Sass Loader、Stylus Loader`
-但存在一个CSS的处理平台—— `PostCSS（https://github.com/postcss/postcss/blob/master/README.cn.md）`
-PostCSS 是一个允许使用 JS 插件转换样式的工具。 这些插件可以检查（lint）你的 CSS，支持 CSS Variables 和 Mixins， 编译尚未被浏览器广泛支持的先进的 CSS 语法，内联图片，以及其它很多优秀的功能
+在webpack里使用loader进行配置：`less-loader、sass-loader、style-loader`
 
-首先安装postcss-loader 和 autoprefixer（自动添加前缀的插件）, css会自动根据Can I Use里的数据添加不同前缀。
+PostCSS 是一个允许使用 JS 插件转换样式的工具。 这些插件可以检查（lint）你的 CSS，支持 CSS Variables 和 Mixins，CSS 自动加前缀、使用下一代 CSS 语法等.
 
 ```js
 module.exports = {
@@ -267,18 +308,7 @@ module.exports = {
       exclude: /node-module/
     }, {
       test: /\.css$/,
-      use: [{
-        loader: 'style-loader'
-      }, {
-        loader: 'css-loader',
-        options: {
-          modules: {
-            modules: true
-          }
-        }
-      }, {
-        loader: 'postcss-loader'
-      }]
+      use: ['style-loader', 'css-loader', 'postcss-loader']
     }]
   }
 }
@@ -286,7 +316,8 @@ module.exports = {
 // postcss.config.js
 module.exports = {
   plugins: [
-    require('autoprefixer')
+    // 需要使用的插件列表
+    require('postcss-cssnext')    // 使用下一代 CSS 语法编写代码
   ]
 }
 ```
@@ -299,10 +330,6 @@ loaders是在打包构建过程中用来处理源文件的（JSX，Scss，Less..
 ##### 1.banner-plugins: 添加版权声明
 ##### 2.HtmlWebpackPlugin（动态生成入口 html）
 依据一个简单的index.html模板，生成一个自动引用你打包后的JS文件的新index.html
-安装： npm install --save-dev html-webpack-plugin
-- 移除public文件夹，利用插件自动生成index.html
-- app目录中，创建index.tmpl.html文件模板。插件会依据此模板生成最终的html页面，会自动添加所依赖的 css, js，favicon等文件。
-- 更新webpack配置。
 
 ##### 3.Hot Module Replacement: 允许修改组件代码后，自动刷新实时预览修改后的效果。
 Hot Module Replacement（HMR）允许修改组件代码后，自动刷新实时预览修改后的效果。
@@ -312,11 +339,8 @@ Hot Module Replacement（HMR）允许修改组件代码后，自动刷新实时�
 不过配置完后，JS模块其实还是不能自动热加载的，还需要在JS模块中执行一个Webpack提供的API才能实现热加载。
 虽然这个API不难使用，但是如果是React模块，使用Babel可以更方便的实现功能热加载。
 思路：
-- Babel和webpack是独立的工具
-- 二者可以一起工作
-- 二者都可以通过插件拓展功能
 - HMR是一个webpack插件，它能在浏览器中实时观察模块修改后的效果，但如果想让它工作，需要对模块进行额外的配置；
-- Babel有一个叫做react-transform-hrm的插件，可以在不对React模块进行额外的配置的前提下让HMR正常工作；
+- Babel 有一个叫做react-transform-hrm 的插件，可以在不对React模块进行额外的配置的前提下让HMR正常工作；
 
 
 #### 11、优化插件
@@ -410,5 +434,183 @@ new HtmlWebpackPlugin({
 缓存无处不在，使用缓存的最好方法是保证你的文件名和文件内容是匹配的（内容改变，名称相应改变）
 解决办法：带hash值
 
+配置说明：
+```js
+const path = require('path');
 
-参考资料： http://www.xbhub.com/wiki/webpack
+module.exports = {
+  // entry 表示 入口，Webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。
+  // 类型可以是 string | object | array   
+  entry: './app/entry', // 只有1个入口，入口只有1个文件
+  entry: ['./app/entry1', './app/entry2'], // 只有1个入口，入口有2个文件
+  entry: { // 有2个入口
+    a: './app/entry-a',
+    b: ['./app/entry-b1', './app/entry-b2']
+  },
+
+  // 如何输出结果：在 Webpack 经过一系列处理后，如何输出最终想要的代码。
+  output: {
+    // 输出文件存放的目录，必须是 string 类型的绝对路径。
+    path: path.resolve(__dirname, 'dist'),
+
+    // 输出文件的名称
+    filename: 'bundle.js', // 完整的名称
+    filename: '[name].js', // 当配置了多个 entry 时，通过名称模版为不同的 entry 生成不同的文件名称
+    filename: '[chunkhash].js', // 根据文件内容 hash 值生成文件名称，用于浏览器长时间缓存文件
+
+    // 发布到线上的所有资源的 URL 前缀，string 类型
+    publicPath: '/assets/', // 放到指定目录下
+    publicPath: '', // 放到根目录下
+    publicPath: 'https://cdn.example.com/', // 放到 CDN 上去
+
+    // 导出库的名称，string 类型
+    // 不填它时，默认输出格式是匿名的立即执行函数
+    library: 'MyLibrary',
+
+    // 导出库的类型，枚举类型，默认是 var
+    // 可以是 umd | umd2 | commonjs2 | commonjs | amd | this | var | assign | window | global | jsonp ，
+    libraryTarget: 'umd', 
+
+    // 是否包含有用的文件路径信息到生成的代码里去，boolean 类型
+    pathinfo: true, 
+
+    // 附加 Chunk 的文件名称
+    chunkFilename: '[id].js',
+    chunkFilename: '[chunkhash].js',
+
+    // JSONP 异步加载资源时的回调函数名称，需要和服务端搭配使用
+    jsonpFunction: 'myWebpackJsonp',
+
+    // 生成的 Source Map 文件名称
+    sourceMapFilename: '[file].map',
+
+    // 浏览器开发者工具里显示的源码模块名称
+    devtoolModuleFilenameTemplate: 'webpack:///[resource-path]',
+
+    // 异步加载跨域的资源时使用的方式
+    crossOriginLoading: 'use-credentials',
+    crossOriginLoading: 'anonymous',
+    crossOriginLoading: false,
+  },
+
+  // 配置模块相关
+  module: {
+    rules: [ // 配置 Loader
+      {  
+        test: /\.jsx?$/, // 正则匹配命中要使用 Loader 的文件
+        include: [ // 只会命中这里面的文件
+          path.resolve(__dirname, 'app')
+        ],
+        exclude: [ // 忽略这里面的文件
+          path.resolve(__dirname, 'app/demo-files')
+        ],
+        use: [ // 使用那些 Loader，有先后次序，从后往前执行
+          'style-loader', // 直接使用 Loader 的名称
+          {
+            loader: 'css-loader',      
+            options: { // 给 html-loader 传一些参数
+            }
+          }
+        ]
+      },
+    ],
+    noParse: [ // 不用解析和处理的模块
+      /special-library\.js$/  // 用正则匹配
+    ],
+  },
+
+  // 配置插件
+  plugins: [],
+
+  // 配置寻找模块的规则
+  resolve: { 
+    modules: [ // 寻找模块的根目录，array 类型，默认以 node_modules 为根目录
+      'node_modules',
+      path.resolve(__dirname, 'app')
+    ],
+    extensions: ['.js', '.json', '.jsx', '.css'], // 模块的后缀名
+    alias: { // 模块别名配置，用于映射模块
+       // 把 'module' 映射 'new-module'，同样的 'module/path/file' 也会被映射成 'new-module/path/file'
+      'module': 'new-module',
+      // 使用结尾符号 $ 后，把 'only-module' 映射成 'new-module'，
+      // 但是不像上面的，'module/path/file' 不会被映射成 'new-module/path/file'
+      'only-module$': 'new-module', 
+    },
+    alias: [ // alias 还支持使用数组来更详细的配置
+      {
+        name: 'module', // 老的模块
+        alias: 'new-module', // 新的模块
+        // 是否是只映射模块，如果是 true 只有 'module' 会被映射，如果是 false 'module/inner/path' 也会被映射
+        onlyModule: true, 
+      }
+    ],
+    symlinks: true, // 是否跟随文件软链接去搜寻模块的路径
+    descriptionFiles: ['package.json'], // 模块的描述文件
+    mainFields: ['main'], // 模块的描述文件里的描述入口的文件的字段名称
+    enforceExtension: false, // 是否强制导入语句必须要写明文件后缀
+  },
+
+  // 输出文件性能检查配置
+  performance: { 
+    hints: 'warning', // 有性能问题时输出警告
+    hints: 'error', // 有性能问题时输出错误
+    hints: false, // 关闭性能检查
+    maxAssetSize: 200000, // 最大文件大小 (单位 bytes)
+    maxEntrypointSize: 400000, // 最大入口文件大小 (单位 bytes)
+    assetFilter: function(assetFilename) { // 过滤要检查的文件
+      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+    }
+  },
+
+  devtool: 'source-map', // 配置 source-map 类型
+
+  context: __dirname, // Webpack 使用的根目录，string 类型必须是绝对路径
+
+  // 配置输出代码的运行环境
+  target: 'web', // 浏览器，默认
+  target: 'webworker', // WebWorker
+  target: 'node', // Node.js，使用 `require` 语句加载 Chunk 代码
+  target: 'async-node', // Node.js，异步加载 Chunk 代码
+  target: 'node-webkit', // nw.js
+  target: 'electron-main', // electron, 主线程
+  target: 'electron-renderer', // electron, 渲染线程
+
+  externals: { // 使用来自 JavaScript 运行环境提供的全局变量
+    jquery: 'jQuery'
+  },
+
+  stats: { // 控制台输出日志控制
+    assets: true,
+    colors: true,
+    errors: true,
+    errorDetails: true,
+    hash: true,
+  },
+
+  devServer: { // DevServer 相关的配置
+    proxy: { // 代理到后端服务接口
+      '/api': 'http://localhost:3000'
+    },
+    contentBase: path.join(__dirname, 'public'), // 配置 DevServer HTTP 服务器的文件根目录
+    compress: true, // 是否开启 gzip 压缩
+    historyApiFallback: true, // 是否开发 HTML5 History API 网页
+    hot: true, // 是否开启模块热替换功能
+    https: false, // 是否开启 HTTPS 模式
+    },
+
+    profile: true, // 是否捕捉 Webpack 构建的性能信息，用于分析什么原因导致构建性能不佳
+
+    cache: false, // 是否启用缓存提升构建速度
+
+    watch: true, // 是否开始
+    watchOptions: { // 监听模式选项
+    // 不监听的文件或文件夹，支持正则匹配。默认为空
+    ignored: /node_modules/,
+    // 监听到变化发生后会等300ms再去执行动作，防止文件更新太快导致重新编译频率太高
+    // 默认为300ms 
+    aggregateTimeout: 300,
+    // 判断文件是否发生变化是不停的去询问系统指定文件有没有变化，默认每秒问 1000 次
+    poll: 1000
+  },
+}
+```

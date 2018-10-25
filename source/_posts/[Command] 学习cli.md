@@ -39,6 +39,7 @@ cover: http://pe7k320h3.bkt.clouddn.com/psb%20%287%29.jpeg
   增加 logger util，用于 commander 命令的处理并作出不同的运行结果显示，比如：安装完毕，服务开启完毕，报错提示等。
 
 
+
 补充：
 1、chalk 是一个颜色的插件
 ``` js
@@ -65,6 +66,7 @@ eg:
 `__filename      /Users/meizu/myfile/programFile/cli-learn/lib/config.js`
 
 4、node child_process 子进程
+
 
 4、rimraf：以包的形式包装rm -rf命令，用来删除文件和文件夹的，不管文件夹是否为空，都可删除。
 5、extend： 
