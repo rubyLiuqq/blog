@@ -346,7 +346,16 @@ arguments 是一个类数组对象。代表传给一个function的参数列表�
 slice 方法得到的结果是一个数组，参数便是 arguments。事实上，满足一定条件的对象都能被 slice 方法转换成数组。
 条件就是： 1)、属性为 0，1，2...；     2）、具有 length 属性；
 
-### 十六、JS中宽高各属性介绍
+### 十六、decodeURI、decodeURIComponent、encodeURI、encodeURIComponent
+```js
+var test1="http://www.wljcz.com/My first/";
+encodeURI(test1);   // http://www.wljcz.com/My%20first/
+encodeURIComponent(test1);  // http%3A%2F%2Fwww.wljcz.com%2FMy%20first%2F
+decodeURI(encodeURI(test1));
+decodeURIComponent(encodeURIComponent(test1));  
+```
+
+### 十七、JS中宽高各属性介绍
 网页可见区域宽： document.body.clientWidth;
 网页可见区域高： document.body.clientHeight;
 网页可见区域宽： document.body.offsetWidth   (包括边线的宽);
