@@ -147,7 +147,7 @@ Vue.component('my-component', {
 <font color="#d00">因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。</font>
 
 ## 六、列表渲染
-### 1、v-if vs v-show
+### 1、v-if/v-show
 `变异方法`：会改变被这些方法调用的原始数组。push(), pop(), shift(), unshift(), splice(), sort(), reverse()。
 `非变异方法`，例如：filter(), concat() 和 slice() 。这些不会改变原始数组，但总是返回一个新数组。
 <font color="#d00">注意事项：</font>
