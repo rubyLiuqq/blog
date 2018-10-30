@@ -19,7 +19,12 @@ toc: true
 [十、前端的各种排序](#十、前端的各种排序)
 [十一、列举HTML5新特性](#十一、列举HTML5新特性)
 [十二、列举Css3新特性](#十二、列举Css3新特性)
-
+[十三、页面渲染机制](#十三、页面渲染机制)
+[十四、原生JS中forEach和Map区别](#十四、原生JS中forEach和Map区别)
+[十五、arguments](#十五、arguments)
+[十六、decodeURI、decodeURIComponent、encodeURI、encodeURIComponent](#十六、decodeURI、decodeURIComponent、encodeURI、encodeURIComponent)
+[十七、JS中宽高各属性介绍](#十七、JS中宽高各属性介绍)
+[十八、Navigator对象](#十八、Navigator对象)
 
 ### 一、JS 中的数据类型
 JavaScript 有 5 种简单数据类型：Undefined、Null、Boolean、Number、String 和 1 种复杂数据类型 Object 。
@@ -109,6 +114,8 @@ async可表示当前脚本不必等待其他脚本，也不必阻塞文档呈现
 * module.exports 初始值为一个空对象{}，所以exports 初始值也是{}；
 * require() 返回的是module.exports 而不是exports。
 
+-----------
+
 ### 七、Promise
 Promise代表了某个未来才会知道结果的事件（通常是一个异步操作），可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。
 Promise对象有三种状态：pending状态（ 等待中），fulfilled状态（操作完成的状态），rejected状态（操作失败的状态），状态不受外界影响，一旦状态改变，就不会再变。
@@ -150,6 +157,8 @@ reg.lastIndex; //0
 6. `RegExp.prototype.test`方法: 用来测试字符串中是否含有子字符串
 eg: /hello/.test("abchello"); // true
 
+-----------
+
 ### 九、数组
 1. Array.prototype.flat(depth)（扁平化数组）
 会递归到指定深度将所有子数组连接，并返回一个新数组。depth 指定嵌套数组中的结构深度，默认值为1
@@ -166,6 +175,8 @@ arr3.flat(2); // [1, 2, 3, 4, 5, 6]
 var arr4 = [1, 2, , 4, 5];
 arr4.flat();    // [1, 2, 4, 5] 会移除数组中的空项
 ```
+
+-----------
 
 ### 十、前端的各种排序
 ![算法导图](http://pfuoi64aq.bkt.clouddn.com/1093977-20170718164528771-1976850903.jpg)
@@ -223,7 +234,7 @@ function(arr){
 3. 选择排序
 思想：每次选择最小的数，将最小的数记录下来，然后排到最前面
 
-
+-----------
 
 ### 十一、列举HTML5新特性
 - 语意化标签(nav、aside、dialog、header、footer等)
@@ -236,6 +247,8 @@ function(arr){
 - webWorkers(类似于多线程并发)
 - webSocket
 
+-----------
+
 ### 十二、列举Css3新特性
 - 选择器
 - 边框(border-image、border-radius、box-shadow)
@@ -247,6 +260,8 @@ function(arr){
 - 动画(animation)
 - 弹性盒模型(flex-box)
 - 媒体查询(@media)
+
+-----------
 
 ### 十三、页面渲染机制
 #### 1.CSS加载会阻塞DOM树吗？
@@ -334,8 +349,12 @@ function(arr){
 onLoad: 等待页面的所有资源都加载完成才会触发，css、js、图片视频
 DOMContentLoaded: 当页面的内容解析完成后，则触发该事件
 
+-----------
 
-### 十四、原生JS中 forEach 和 Map 区别
+
+### 十四、原生JS中forEach和Map区别
+
+-----------
 
 ### 十五、arguments
 arguments 是一个类数组对象。代表传给一个function的参数列表。
@@ -346,6 +365,8 @@ arguments 是一个类数组对象。代表传给一个function的参数列表�
 slice 方法得到的结果是一个数组，参数便是 arguments。事实上，满足一定条件的对象都能被 slice 方法转换成数组。
 条件就是： 1)、属性为 0，1，2...；     2）、具有 length 属性；
 
+-----------
+
 ### 十六、decodeURI、decodeURIComponent、encodeURI、encodeURIComponent
 ```js
 var test1="http://www.wljcz.com/My first/";
@@ -354,6 +375,8 @@ encodeURIComponent(test1);  // http%3A%2F%2Fwww.wljcz.com%2FMy%20first%2F
 decodeURI(encodeURI(test1));
 decodeURIComponent(encodeURIComponent(test1));  
 ```
+
+-----------
 
 ### 十七、JS中宽高各属性介绍
 网页可见区域宽： document.body.clientWidth;
@@ -370,3 +393,44 @@ decodeURIComponent(encodeURIComponent(test1));
 屏幕分辨率的宽： window.screen.width;
 屏幕可用工作区高度： window.screen.availHeight;
 
+-----------
+
+### 十八、Navigator对象
+appCodeName: 返回浏览器的代码名。
+appMinorVersion:	返回浏览器的次级版本。
+appName:	返回浏览器的名称。
+appVersion:	返回浏览器的平台和版本信息。
+browserLanguage:	返回当前浏览器的语言。
+cookieEnabled:	返回指明浏览器中是否启用 cookie 的布尔值。
+cpuClass:	返回浏览器系统的 CPU 等级。
+onLine:	返回指明系统是否处于脱机模式的布尔值。
+platform:	返回运行浏览器的操作系统平台。
+systemLanguage:	返回 OS 使用的默认语言。
+userAgent:	返回由客户机发送服务器的 user-agent 头部的值。(使用的比较多: PC还是移动端；安卓还是IOS；浏览器的类型)
+userLanguage:	返回 OS 的自然语言设置。
+```js
+var browser={
+  versions:function(){
+    var u = navigator.userAgent, app = navigator.appVersion;
+    return {         // 移动终端浏览器版本信息
+　　  trident: u.indexOf('Trident') > -1, // IE内核
+　　  presto: u.indexOf('Presto') > -1, // opera内核
+　　  webKit: u.indexOf('AppleWebKit') > -1, // 苹果、谷歌内核
+　　  gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, // 火狐内核
+　　  mobile: !!u.match(/AppleWebKit.*Mobile.*/), // 是否为移动终端
+　　  ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), // ios终端
+　　  android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, // android终端或uc浏览器
+　　  iPhone: u.indexOf('iPhone') > -1,  // 是否为iPhone或者QQHD浏览器
+　　  iPad: u.indexOf('iPad') > -1,   // 是否iPad
+　　  webApp: u.indexOf('Safari') == -1   // 是否web应该程序，没有头部与底部
+    };
+  }(),
+  language:(navigator.browserLanguage || navigator.language).toLowerCase()
+}
+
+if(browser.versions.mobile){
+  console.log('我是移动端');      
+}
+```
+
+-----------
